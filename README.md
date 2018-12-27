@@ -1,5 +1,5 @@
 # rw-multiplayer
-This is my online multiplayer mod for Rain World. It uses the mod loader Partiality, and the hooks it provides with MonoMod.RuntimeDetour, to make any existing local multiplayer mod online. It is probably a complete buggy confusing mess but sometimes it works except for the fact that it doesn't work at all. Contributions are fine, but good luck doing that.
+This is my online multiplayer mod for Rain World. It uses the mod loader Partiality, and the hooks it provides with MonoMod.RuntimeDetour, to make any existing local multiplayer mod online. It is probably a complete buggy confusing mess but sometimes it works except for the fact that it mostly doesn't work. Contributions are fine, but good luck doing that.
 # But...
 There are existing ways of making a local multiplayer mod online, like Parsec. But that doesn't let you have one screen for each player and it's not as ~~hell~~ fun for the programmer!
 # Goals
