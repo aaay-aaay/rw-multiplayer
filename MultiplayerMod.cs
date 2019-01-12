@@ -24,7 +24,7 @@ public class MultiplayerMod : PartialityMod
     
     public void StartHook(On.RainWorld.orig_Start orig, RainWorld rw)
     {
-        UnityEngine.Random.seed = 4;
+        UnityEngine.Random.seed = 4; // i'm not really sure why this is here
         orig(rw);
     }
     
@@ -33,29 +33,29 @@ public class MultiplayerMod : PartialityMod
         orig(menu, manager, showRegionSpecificBkg);
         Page firstPage = menu.pages[0];
         float num3 = (menu.CurrLang != InGameTranslator.LanguageID.Italian) ? 110f : 150f;
-        firstPage.subObjects.Add(new SimpleButton(menu, firstPage, "MULTIPLAYER", "MULTIPLAYER", new Vector2(683f - num3 / 2, 410f), new Vector2(num3, 30f)));
+        firstPage.subObjects.Add(new SimpleButton(menu, firstPage, "MULTIPLAYER", "MULTIPLAYER", new Vector2(683f - num3 / 2, 410f), new Vector2(num3, 30f))); // add a button that says "MULTIPLAYER"
     }
     
     public void MainMenuSingalHook(On.Menu.MainMenu.orig_Singal orig, MainMenu menu, MenuObject sender, string message)
     {
         orig(menu, sender, message);
-        if (message == "MULTIPLAYER")
+        if (message == "MULTIPLAYER") // the MULTIPLAYER button has been pressed
         {
-            menu.ShutDownProcess();
-            menu.manager.currentMainLoop = new MultiplayerMenu(menu.manager, this);
+            menu.ShutDownProcess(); // shut down the menu, remove the graphics for all the buttons
+            menu.manager.currentMainLoop = new MultiplayerMenu(menu.manager, this); // create a new multiplayer menu
         }
     }
     
     public unsafe void UpdateHook(On.ProcessManager.orig_Update orig, ProcessManager manager, float deltaTime)
     {
-        if (startGame)
+        if (startGame) // start the game as a "server"
         {
             ns.Write(BitConverter.GetBytes(UnityEngine.Random.seed), 0, 4);
             manager.currentMainLoop.ShutDownProcess();
             manager.currentMainLoop = new ServerMainLoop(manager, this);
             startGame = false;
         }
-        else if (startClient)
+        else if (startClient) // start the game as a "client"
         {
             byte[] randBytes = new byte[4];
             ns.Read(randBytes, 0, 4);
@@ -67,7 +67,7 @@ public class MultiplayerMod : PartialityMod
         orig(manager, deltaTime);
     }
     
-    public void MakeServerThread()
+    public void MakeServerThread() // listen on a different thread to prevent the game from crashing
     {
         new Thread(new ThreadStart(this.Server)).Start();
     }
@@ -92,7 +92,7 @@ public class MultiplayerMod : PartialityMod
         startGame = true;
     }
     
-    public void MakeClientThread(string cip)
+    public void MakeClientThread(string cip) // connect on a different thread because... uh...
     {
         ip = cip;
         new Thread(new ThreadStart(this.Client)).Start();
@@ -115,6 +115,7 @@ public class MultiplayerMod : PartialityMod
         startClient = true;
     }
     
+    // suggestion by fyre: [left right down up pickup throw jump spare] significantly reduces network usage
     public static byte ConvertInputPackage(Player.InputPackage pkg)
     {
         return (byte)((pkg.x == -1 ? 1 : 0) | (pkg.x == 1 ? 2 : 0) | (pkg.y == -1 ? 4 : 0) | (pkg.y == 1 ? 8 : 0) | (pkg.pckp ? 16 : 0) | (pkg.thrw ? 32 : 0) | (pkg.jmp ? 64 : 0));
@@ -128,8 +129,9 @@ public class MultiplayerMod : PartialityMod
     public static TcpClient client;
     public static NetworkStream ns;
     public static string ip;
+    // volatile prevents certain optimizations that could cause a problem with multiple threads doing stuff with a variable
     public static volatile bool startGame = false;
     public static volatile bool startClient = false;
     
-    public int RWGctr = 0;
+    public int RWGctr = 0; // i have no idea what this is for???
 }

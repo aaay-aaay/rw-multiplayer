@@ -2,6 +2,8 @@ using Menu;
 using System;
 using UnityEngine;
 
+// i am not commenting this. figure it out yourself.
+
 public class ClientMenu : Menu.Menu
 {
     public ClientMenu(ProcessManager manager, MultiplayerMod mod) : base(manager, (ProcessManager.ProcessID)(-1))
