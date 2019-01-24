@@ -13,6 +13,7 @@ public class ServerMainLoop : RainWorldGame
         this.mod = mod;
         this.ns = MultiplayerMod.ns;
         
+        // send save so client can load it and sync
         if (File.Exists(manager.rainWorld.progression.saveFilePath))
         {
             byte[] data = File.ReadAllBytes(manager.rainWorld.progression.saveFilePath);
@@ -22,8 +23,10 @@ public class ServerMainLoop : RainWorldGame
         }
         else
         {
+            // no save to send.
             ns.Write(BitConverter.GetBytes(0), 0, 4);
         }
+        // follow the server's player
         cameras[0].followAbstractCreature = Players[0];
     }
     

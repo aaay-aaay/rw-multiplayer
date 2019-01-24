@@ -2,6 +2,8 @@ using Menu;
 using System;
 using UnityEngine;
 
+// This really doesn't need its own menu.
+
 public class ServerMenu : Menu.Menu
 {
     public ServerMenu(ProcessManager manager, MultiplayerMod mod) : base(manager, (ProcessManager.ProcessID)(-1))

@@ -12,17 +12,20 @@ public class ClientMainLoop : RainWorldGame
     {
         this.mod = mod;
         this.ns = MultiplayerMod.ns;
+        // avoid deleting existing save
         manager.rainWorld.options.saveSlot = 42;
         
+        // get save
         byte[] lenBytes = new byte[4];
         ns.Read(lenBytes, 0, 4);
         int len = BitConverter.ToInt32(lenBytes, 0);
-        if (len != 0)
+        if (len != 0) // if len = 0 there isn't a save
         {
             byte[] data = new byte[len];
             ns.Read(data, 0, len);
             File.WriteAllBytes(manager.rainWorld.progression.saveFilePath, data);
         }
+        // follow the client's player
         cameras[0].followAbstractCreature = Players[1];
     }
     

@@ -132,6 +132,4 @@ public class MultiplayerMod : PartialityMod
     // volatile prevents certain optimizations that could cause a problem with multiple threads doing stuff with a variable
     public static volatile bool startGame = false;
     public static volatile bool startClient = false;
-    
-    public int RWGctr = 0; // i have no idea what this is for???
 }
