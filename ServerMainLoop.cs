@@ -28,13 +28,38 @@ public class ServerMainLoop : RainWorldGame
         }
         // follow the server's player
         cameras[0].followAbstractCreature = Players[0];
+        
+        On.RWInput.PlayerInput += InputHook;
     }
     
     public override void Update()
     {
         base.Update();
+        
+        // Player.InputPackage imp = RWInput.PlayerInput(0, manager.rainWorld.options, manager.rainWorld.setup);
+        Player.InputPackage imp = (Player.InputPackage)PlayerInput.Invoke(null, new object[] { 0, manager.rainWorld.options, manager.rainWorld.setup });
+        ns.Write(new byte[]{MultiplayerMod.ConvertInputPackage(imp)}, 0, 1);
+        
+        byte[] bimp = new byte[1];
+        ns.Read(bimp, 0, 1);
+        multiplayerInput = MultiplayerMod.GetInputPackage(bimp[0]);
+    }
+    
+    public Player.InputPackage InputHook(On.RWInput.orig_PlayerInput orig, int playerNumber, Options options, RainWorldGame.SetupValues setup)
+    {
+        if (playerNumber == 0)
+        {
+            return orig(0, options, setup);
+        }
+        else
+        {
+            return multiplayerInput;
+        }
     }
     
     public MultiplayerMod mod;
     public NetworkStream ns;
+    public Player.InputPackage multiplayerInput;
+    
+    public static MethodInfo PlayerInput = typeof(Player).Assembly.GetType("RWInput", true).GetMethod("PlayerInput", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 }
