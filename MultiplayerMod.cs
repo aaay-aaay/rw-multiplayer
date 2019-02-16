@@ -24,7 +24,6 @@ public class MultiplayerMod : PartialityMod
     
     public void StartHook(On.RainWorld.orig_Start orig, RainWorld rw)
     {
-        UnityEngine.Random.seed = 4; // i'm not really sure why this is here
         orig(rw);
     }
     
@@ -46,7 +45,7 @@ public class MultiplayerMod : PartialityMod
         }
     }
     
-    public unsafe void UpdateHook(On.ProcessManager.orig_Update orig, ProcessManager manager, float deltaTime)
+    public void UpdateHook(On.ProcessManager.orig_Update orig, ProcessManager manager, float deltaTime)
     {
         if (startGame) // start the game as a "server"
         {

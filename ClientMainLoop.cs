@@ -31,7 +31,7 @@ public class ClientMainLoop : RainWorldGame
     
     public override void Update()
     {
-        base.Update()
+        base.Update();
     }
     
     public MultiplayerMod mod;
